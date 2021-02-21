@@ -3,11 +3,15 @@ package br.edu.ifpr.paranavai.poswebsys.rh.dominio;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
+import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -16,13 +20,22 @@ public class Pessoa {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
+	@NotBlank(message = "O campo nome não pode ser vazio.")
+	@Column(nullable = false)
 	private String nome;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataNascimento;
 
+	@CPF
+	@NotBlank
+	@Column(nullable = false)
 	private String cpf;
+	
+	@Email
 	private String email;
+	
 	private String telefone;
 	
 	@Deprecated
