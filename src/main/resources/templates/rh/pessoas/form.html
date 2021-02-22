@@ -24,7 +24,10 @@
       		<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
 			<input type="text" th:field="*{email}" placeholder="Email" class="form-control mb-4 col-4">
       		<input type="text" th:field="*{telefone}" placeholder="Telefone" class="form-control mb-4 col-4">
-			
+			<select th:field="*{cidade}" class="form-control mb-4 col-4">
+			    <option th:each="cidade: ${cidades}"
+                th:value="${cidade.id}" th:text="${cidade.nome} + ' (' + ${cidade.uf} + ')'"></option>
+			</select>
 			<button type="submit" class="btn btn-info col-2">Salvar</button>
 		</form>
 		<hr>

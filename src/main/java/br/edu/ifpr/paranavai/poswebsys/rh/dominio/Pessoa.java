@@ -8,11 +8,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import br.edu.ifpr.paranavai.poswebsys.core.dominio.Cidade;
 
 @Entity
 public class Pessoa {
@@ -37,6 +40,9 @@ public class Pessoa {
 	private String email;
 	
 	private String telefone;
+	
+	@ManyToOne(optional = false)
+	private Cidade cidade;
 	
 	@Deprecated
 	protected Pessoa() {}
@@ -91,6 +97,14 @@ public class Pessoa {
 
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
+	}
+
+	public Cidade getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(Cidade cidade) {
+		this.cidade = cidade;
 	}
 
 	@Override

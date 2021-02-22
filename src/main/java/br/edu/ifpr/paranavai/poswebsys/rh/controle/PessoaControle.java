@@ -1,5 +1,6 @@
 package br.edu.ifpr.paranavai.poswebsys.rh.controle;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import br.edu.ifpr.paranavai.poswebsys.core.dominio.Cidade;
+import br.edu.ifpr.paranavai.poswebsys.core.dominio.CidadeRepositorio;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.Pessoa;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.PessoaRepositorio;
 
@@ -19,9 +22,11 @@ import br.edu.ifpr.paranavai.poswebsys.rh.dominio.PessoaRepositorio;
 public class PessoaControle {
 	
 	private PessoaRepositorio pessoaRepo;
+	private CidadeRepositorio cidadeRepo;
 	
-	public PessoaControle(PessoaRepositorio pessoaRepo) {
+	public PessoaControle(PessoaRepositorio pessoaRepo, CidadeRepositorio cidadeRepo) {
 		this.pessoaRepo = pessoaRepo;
+		this.cidadeRepo = cidadeRepo;
 	}
 	
 	@GetMapping("/rh/pessoas")
@@ -31,7 +36,11 @@ public class PessoaControle {
 	}
 	
 	@GetMapping("/rh/pessoas/nova")
-	public String novaPessoa(@ModelAttribute("pessoa") Pessoa pessoa) {
+	public String novaPessoa(Model model) {
+		
+		model.addAttribute("pessoa", new Pessoa(""));
+		model.addAttribute("cidades", cidadeRepo.findAll());
+		
 		return "rh/pessoas/form";
 	}
 	
@@ -43,12 +52,15 @@ public class PessoaControle {
 		}
 		
 		model.addAttribute("pessoa", pessoaOpt.get());
+		model.addAttribute("cidades", cidadeRepo.findAll());
+		
 		return "rh/pessoas/form";
 	}
 	
 	@PostMapping("/rh/pessoas/salvar")
-	public String salvarPessoa(@Valid @ModelAttribute("pessoa") Pessoa pessoa, BindingResult bindingResult) {
+	public String salvarPessoa(@Valid @ModelAttribute("pessoa") Pessoa pessoa, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("cidades", cidadeRepo.findAll());
 			return "rh/pessoas/form";
 		}
 		
