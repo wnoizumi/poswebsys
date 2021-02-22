@@ -1,6 +1,7 @@
 package br.edu.ifpr.paranavai.poswebsys.rh.controle;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -12,21 +13,31 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.edu.ifpr.paranavai.poswebsys.core.dominio.Cidade;
 import br.edu.ifpr.paranavai.poswebsys.core.dominio.CidadeRepositorio;
+import br.edu.ifpr.paranavai.poswebsys.rh.dominio.Departamento;
+import br.edu.ifpr.paranavai.poswebsys.rh.dominio.DepartamentoRepositorio;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.Pessoa;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.PessoaRepositorio;
+import br.edu.ifpr.paranavai.poswebsys.rh.dominio.dtos.DepartamentoSelecaoDTO;
 
 @Controller
 public class PessoaControle {
 	
 	private PessoaRepositorio pessoaRepo;
 	private CidadeRepositorio cidadeRepo;
+	private DepartamentoRepositorio departamentoRepo;
 	
-	public PessoaControle(PessoaRepositorio pessoaRepo, CidadeRepositorio cidadeRepo) {
+	private List<Departamento> departamentosFiltrados = new ArrayList<>();
+	private String primeirosTresCaracteres;
+	
+	public PessoaControle(PessoaRepositorio pessoaRepo, CidadeRepositorio cidadeRepo, DepartamentoRepositorio departamentoRepo) {
 		this.pessoaRepo = pessoaRepo;
 		this.cidadeRepo = cidadeRepo;
+		this.departamentoRepo = departamentoRepo;
 	}
 	
 	@GetMapping("/rh/pessoas")
@@ -77,5 +88,28 @@ public class PessoaControle {
 		
 		pessoaRepo.delete(pessoaOpt.get());
 		return "redirect:/rh/pessoas";
+	}
+	
+	@RequestMapping("/rh/pessoas/departamentosNomeAutoComplete")
+	@ResponseBody
+	public List<DepartamentoSelecaoDTO> departamentosNomeAutoComplete(@RequestParam(value="term", required = false, defaultValue="") String term) {
+		List<DepartamentoSelecaoDTO> sugestoes = new ArrayList<>();
+		try {
+			if (term.length() >= 3) {
+				primeirosTresCaracteres = term;
+				departamentosFiltrados = departamentoRepo.findByNome(term);
+			}
+			
+			for (Departamento departamento : departamentosFiltrados) {
+				if (departamento.getNome().toLowerCase().contains(term.toLowerCase())) {
+					sugestoes.add(new DepartamentoSelecaoDTO(departamento.getNome(), departamento.getId()));
+				}
+			}
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		return sugestoes;
 	}
 }

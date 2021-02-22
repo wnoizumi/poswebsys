@@ -9,11 +9,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.PostLoad;
+import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.util.StringUtils;
 
 import br.edu.ifpr.paranavai.poswebsys.core.dominio.Cidade;
 
@@ -24,7 +28,7 @@ public class Pessoa {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@NotBlank(message = "O campo nome não pode ser vazio.")
+	@NotBlank(message = "O campo nome não pode ser vazio")
 	@Column(nullable = false)
 	private String nome;
 
@@ -42,7 +46,15 @@ public class Pessoa {
 	private String telefone;
 	
 	@ManyToOne(optional = false)
+	@NotNull(message = "Selecione uma cidade")
 	private Cidade cidade;
+	
+	@ManyToOne(optional = false)
+	@NotNull(message = "Selecione um departamento")
+	private Departamento departamento;
+	
+	@Transient
+	private String nomeDepartamento;
 	
 	@Deprecated
 	protected Pessoa() {}
@@ -107,6 +119,25 @@ public class Pessoa {
 		this.cidade = cidade;
 	}
 
+	public Departamento getDepartamento() {
+		return departamento;
+	}
+
+	public void setDepartamento(Departamento departamento) {
+		this.departamento = departamento;
+	}
+	
+	public String getNomeDepartamento() {
+		if (departamento != null) {
+			nomeDepartamento = departamento.getNome();
+		}
+		return nomeDepartamento;
+	}
+	
+	public void setNomeDepartamento(String nomeDepartamento) {
+		this.nomeDepartamento = nomeDepartamento;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -127,5 +158,10 @@ public class Pessoa {
 	@Override
 	public String toString() {
 		return "Pessoa [nome=" + nome + "]";
+	}
+	
+	@PostLoad
+	public void preencheNomeDepartamento() {
+		this.nomeDepartamento = departamento.getNome();
 	}
 }

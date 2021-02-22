@@ -2,6 +2,7 @@ package br.edu.ifpr.paranavai.poswebsys;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -15,6 +16,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.edu.ifpr.paranavai.poswebsys.core.dominio.Cidade;
 import br.edu.ifpr.paranavai.poswebsys.core.dominio.CidadeRepositorio;
+import br.edu.ifpr.paranavai.poswebsys.rh.dominio.Departamento;
+import br.edu.ifpr.paranavai.poswebsys.rh.dominio.DepartamentoRepositorio;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.Pessoa;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.PessoaRepositorio;
 
@@ -26,6 +29,8 @@ public class PopulacaoInicialBanco implements CommandLineRunner {
 	private PessoaRepositorio pessoaRepo;
 	@Autowired
 	private CidadeRepositorio cidadeRepo;
+	@Autowired
+	private DepartamentoRepositorio departamentoRepo;
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -43,21 +48,31 @@ public class PopulacaoInicialBanco implements CommandLineRunner {
 		});
 		
 		cidadeRepo.flush();
+
+		Departamento departamento1 = new Departamento("Tecnologia da Informação", "TI");
+		Departamento departamento2 = new Departamento("Recursos Humanos", "RH");
+		Departamento departamento3 = new Departamento("Produção", "PROD");
+		departamentoRepo.save(departamento1);
+		departamentoRepo.save(departamento2);
+		departamentoRepo.save(departamento3);
+		
+		departamentoRepo.flush();
 		
 		Cidade cidade1 = cidadeRepo.findById(1L).get();
-		
 		
 		Pessoa p1 = new Pessoa("Joao");
 		p1.setDataNascimento(LocalDate.of(1990, 4, 1));
 		p1.setEmail("joao@gmail.com");
 		p1.setCpf("10518516962");
 		p1.setCidade(cidade1);
+		p1.setDepartamento(departamento1);
 		
 		Pessoa p2 = new Pessoa("Maria");
 		p2.setDataNascimento(LocalDate.of(1900, 1, 1));
 		p2.setEmail("maria@gmail.com");
 		p2.setCpf("10518516962");
 		p2.setCidade(cidade1);
+		p2.setDepartamento(departamento1);
 		
 		pessoaRepo.save(p1);
 		pessoaRepo.save(p2);

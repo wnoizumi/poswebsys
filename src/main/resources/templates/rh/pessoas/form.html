@@ -8,6 +8,32 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
 	crossorigin="anonymous">
+	
+ <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+<script
+  src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+  integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+  crossorigin="anonymous"></script>
+  
+<script type="text/javascript">
+	$(function() {
+		$("#nomeDepartamento").autocomplete({
+			source: "departamentosNomeAutoComplete", 
+			minLength: 3,
+			select: function(event, ui) {
+				this.value = ui.item.label;
+				$("#idDepartamento").val(ui.item.value);
+				return false;
+			}
+		});
+	});
+</script>
+
 </head>
 <body>
 	<div class="container my-2">
@@ -28,6 +54,10 @@
 			    <option th:each="cidade: ${cidades}"
                 th:value="${cidade.id}" th:text="${cidade.nome} + ' (' + ${cidade.uf} + ')'"></option>
 			</select>
+			<span th:if="${#fields.hasErrors('departamento')}" th:errors="*{departamento}" class="text-danger"></span>
+			<input id="nomeDepartamento" type="text" th:field="*{nomeDepartamento}" placeholder="Departamento" class="form-control mb-4 col-4">
+  			<input id="idDepartamento" type="hidden" th:field="*{departamento}" class="form-control mb-4 col-4">	 
+			
 			<button type="submit" class="btn btn-info col-2">Salvar</button>
 		</form>
 		<hr>
