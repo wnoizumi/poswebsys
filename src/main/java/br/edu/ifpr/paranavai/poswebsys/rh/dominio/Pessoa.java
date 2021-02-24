@@ -53,11 +53,6 @@ public class Pessoa {
 	@NotNull(message = "Selecione um departamento")
 	private Departamento departamento;
 	
-	@Transient
-	private String nomeDepartamento;
-	@Transient
-	private String nomeCidade;
-	
 	@Deprecated
 	protected Pessoa() {}
 	
@@ -123,32 +118,24 @@ public class Pessoa {
 	
 	public String getNomeCidade() {
 		if (cidade != null) {
-			nomeCidade = cidade.getNomeUF();
+			return cidade.getNomeUF();
 		}
-		return nomeCidade;
-	}
-
-	public void setNomeCidade(String nomeCidade) {
-		this.nomeCidade = nomeCidade;
+		return "";
 	}
 
 	public Departamento getDepartamento() {
 		return departamento;
 	}
-
+	
 	public void setDepartamento(Departamento departamento) {
 		this.departamento = departamento;
 	}
-	
+
 	public String getNomeDepartamento() {
 		if (departamento != null) {
-			nomeDepartamento = departamento.getNome();
+			return departamento.getNome();
 		}
-		return nomeDepartamento;
-	}
-	
-	public void setNomeDepartamento(String nomeDepartamento) {
-		this.nomeDepartamento = nomeDepartamento;
+		return "";
 	}
 
 	@Override
@@ -171,11 +158,5 @@ public class Pessoa {
 	@Override
 	public String toString() {
 		return "Pessoa [nome=" + nome + "]";
-	}
-	
-	@PostLoad
-	public void preencheTransientes() {
-		this.nomeDepartamento = departamento.getNome();
-		this.nomeCidade = cidade.getNomeUF();
 	}
 }
