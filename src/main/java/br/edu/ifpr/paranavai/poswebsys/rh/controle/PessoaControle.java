@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.edu.ifpr.paranavai.poswebsys.core.dominio.Cidade;
 import br.edu.ifpr.paranavai.poswebsys.core.dominio.CidadeRepositorio;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.Departamento;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.DepartamentoRepositorio;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.Pessoa;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.PessoaRepositorio;
-import br.edu.ifpr.paranavai.poswebsys.rh.dominio.dtos.DepartamentoSelecaoDTO;
+import br.edu.ifpr.paranavai.poswebsys.rh.dominio.dtos.AutoCompleteDTO;
 
 @Controller
 public class PessoaControle {
@@ -32,7 +33,7 @@ public class PessoaControle {
 	private DepartamentoRepositorio departamentoRepo;
 	
 	private List<Departamento> departamentosFiltrados = new ArrayList<>();
-	private String primeirosTresCaracteres;
+	private List<Cidade> cidadesFiltradas = new ArrayList<>();
 	
 	public PessoaControle(PessoaRepositorio pessoaRepo, CidadeRepositorio cidadeRepo, DepartamentoRepositorio departamentoRepo) {
 		this.pessoaRepo = pessoaRepo;
@@ -50,7 +51,6 @@ public class PessoaControle {
 	public String novaPessoa(Model model) {
 		
 		model.addAttribute("pessoa", new Pessoa(""));
-		model.addAttribute("cidades", cidadeRepo.findAll());
 		
 		return "rh/pessoas/form";
 	}
@@ -63,7 +63,6 @@ public class PessoaControle {
 		}
 		
 		model.addAttribute("pessoa", pessoaOpt.get());
-		model.addAttribute("cidades", cidadeRepo.findAll());
 		
 		return "rh/pessoas/form";
 	}
@@ -71,7 +70,6 @@ public class PessoaControle {
 	@PostMapping("/rh/pessoas/salvar")
 	public String salvarPessoa(@Valid @ModelAttribute("pessoa") Pessoa pessoa, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("cidades", cidadeRepo.findAll());
 			return "rh/pessoas/form";
 		}
 		
@@ -90,19 +88,40 @@ public class PessoaControle {
 		return "redirect:/rh/pessoas";
 	}
 	
+	@RequestMapping("/rh/pessoas/cidadesNomeAutoComplete")
+	@ResponseBody
+	public List<AutoCompleteDTO> cidadesNomeAutoComplete(@RequestParam(value="term", required = false, defaultValue = "") String term) {
+		List<AutoCompleteDTO> sugestoes = new ArrayList<>();
+		
+		try {
+			if(term.length() >= 3) {
+				cidadesFiltradas = cidadeRepo.searchByNome(term);
+			}
+			
+			for (Cidade cidade : cidadesFiltradas) {
+				if (cidade.getNome().toLowerCase().contains(term.toLowerCase())) {
+					AutoCompleteDTO dto = new AutoCompleteDTO(cidade.getNomeUF(), Long.toString(cidade.getId()));
+					sugestoes.add(dto);
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return sugestoes;
+	}
+	
 	@RequestMapping("/rh/pessoas/departamentosNomeAutoComplete")
 	@ResponseBody
-	public List<DepartamentoSelecaoDTO> departamentosNomeAutoComplete(@RequestParam(value="term", required = false, defaultValue="") String term) {
-		List<DepartamentoSelecaoDTO> sugestoes = new ArrayList<>();
+	public List<AutoCompleteDTO> departamentosNomeAutoComplete(@RequestParam(value="term", required = false, defaultValue="") String term) {
+		List<AutoCompleteDTO> sugestoes = new ArrayList<>();
 		try {
 			if (term.length() >= 3) {
-				primeirosTresCaracteres = term;
-				departamentosFiltrados = departamentoRepo.findByNome(term);
+				departamentosFiltrados = departamentoRepo.searchByNome(term);
 			}
 			
 			for (Departamento departamento : departamentosFiltrados) {
 				if (departamento.getNome().toLowerCase().contains(term.toLowerCase())) {
-					sugestoes.add(new DepartamentoSelecaoDTO(departamento.getNome(), departamento.getId()));
+					sugestoes.add(new AutoCompleteDTO(departamento.getNome(), Long.toString(departamento.getId())));	
 				}
 			}
 			

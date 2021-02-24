@@ -83,5 +83,8 @@ public class Cidade {
 		return "Cidade [nome=" + nome + ", UF=" + uf + "]";
 	}
 
+	public String getNomeUF() {
+		return String.format("%1$s (%2$s)", getNome(), getUf());
+	}
 	
 }

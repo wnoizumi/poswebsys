@@ -22,6 +22,16 @@
   
 <script type="text/javascript">
 	$(function() {
+		$("#nomeCidade").autocomplete({
+			source: "cidadesNomeAutoComplete", 
+			minLength: 3,
+			select: function(event, ui) {
+				this.value = ui.item.label;
+				$("#idCidade").val(ui.item.value);
+				return false;
+			}
+		});
+		
 		$("#nomeDepartamento").autocomplete({
 			source: "departamentosNomeAutoComplete", 
 			minLength: 3,
@@ -42,18 +52,22 @@
 		<h2>Editar Pessoa</h2>
 		<form action="#" th:action="@{/rh/pessoas/salvar}" th:object="${pessoa}" method="POST">
 			<input type="hidden" id="id" th:field="*{id}">
+			
 			<span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="text-danger"></span>
 			<input type="text" th:field="*{nome}" placeholder="Nome" class="form-control mb-4 col-4">
       		<input type="date" th:field="*{dataNascimento}" placeholder="Data Nascimento" class="form-control mb-4 col-4">
+      		
       		<span th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}" class="text-danger"></span>
       		<input type="text" th:field="*{cpf}" placeholder="CPF" class="form-control mb-4 col-4">
+      		
       		<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
 			<input type="text" th:field="*{email}" placeholder="Email" class="form-control mb-4 col-4">
       		<input type="text" th:field="*{telefone}" placeholder="Telefone" class="form-control mb-4 col-4">
-			<select th:field="*{cidade}" class="form-control mb-4 col-4">
-			    <option th:each="cidade: ${cidades}"
-                th:value="${cidade.id}" th:text="${cidade.nome} + ' (' + ${cidade.uf} + ')'"></option>
-			</select>
+      		
+			<span th:if="${#fields.hasErrors('cidade')}" th:errors="*{cidade}" class="text-danger"></span>
+			<input id="nomeCidade" type="text" th:field="*{nomeCidade}" placeholder="Cidade" class="form-control mb-4 col-4">
+  			<input id="idCidade" type="hidden" th:field="*{cidade}" class="form-control mb-4 col-4">
+			
 			<span th:if="${#fields.hasErrors('departamento')}" th:errors="*{departamento}" class="text-danger"></span>
 			<input id="nomeDepartamento" type="text" th:field="*{nomeDepartamento}" placeholder="Departamento" class="form-control mb-4 col-4">
   			<input id="idDepartamento" type="hidden" th:field="*{departamento}" class="form-control mb-4 col-4">	 

@@ -55,6 +55,8 @@ public class Pessoa {
 	
 	@Transient
 	private String nomeDepartamento;
+	@Transient
+	private String nomeCidade;
 	
 	@Deprecated
 	protected Pessoa() {}
@@ -118,6 +120,17 @@ public class Pessoa {
 	public void setCidade(Cidade cidade) {
 		this.cidade = cidade;
 	}
+	
+	public String getNomeCidade() {
+		if (cidade != null) {
+			nomeCidade = cidade.getNomeUF();
+		}
+		return nomeCidade;
+	}
+
+	public void setNomeCidade(String nomeCidade) {
+		this.nomeCidade = nomeCidade;
+	}
 
 	public Departamento getDepartamento() {
 		return departamento;
@@ -161,7 +174,8 @@ public class Pessoa {
 	}
 	
 	@PostLoad
-	public void preencheNomeDepartamento() {
+	public void preencheTransientes() {
 		this.nomeDepartamento = departamento.getNome();
+		this.nomeCidade = cidade.getNomeUF();
 	}
 }

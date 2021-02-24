@@ -1,15 +1,15 @@
 package br.edu.ifpr.paranavai.poswebsys.rh.dominio.dtos;
 
-public class DepartamentoSelecaoDTO {
+public class AutoCompleteDTO {
 	
 	private String label;
 	private String value;
 	
-	public DepartamentoSelecaoDTO() {}
+	public AutoCompleteDTO() {}
 	
-	public DepartamentoSelecaoDTO(String label, Long value) {
+	public AutoCompleteDTO(String label, String value) {
 		this.label = label;
-		this.value = Long.toString(value);
+		this.value = value;
 	}
 
 	public String getLabel() {
