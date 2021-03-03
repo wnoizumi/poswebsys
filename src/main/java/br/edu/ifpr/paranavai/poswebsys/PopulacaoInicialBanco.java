@@ -72,9 +72,17 @@ public class PopulacaoInicialBanco implements CommandLineRunner {
 		p2.setEmail("maria@gmail.com");
 		p2.setCpf("10518516962");
 		p2.setCidade(cidade1);
-		p2.setDepartamento(departamento1);
+		p2.setDepartamento(departamento2);
+
+		Pessoa p3 = new Pessoa("Willian");
+		p3.setDataNascimento(LocalDate.of(1990, 2, 1));
+		p3.setEmail("willian@gmail.com");
+		p3.setCpf("10518516962");
+		p3.setCidade(cidade1);
+		p3.setDepartamento(departamento3);
 		
 		pessoaRepo.save(p1);
 		pessoaRepo.save(p2);
+		pessoaRepo.save(p3);
 	}
 }

@@ -43,7 +43,7 @@ public class PessoaControle {
 	
 	@GetMapping("/rh/pessoas")
 	public String pessoas(Model model) {
-		model.addAttribute("listaPessoas", pessoaRepo.findAll());
+		model.addAttribute("listaPessoas", pessoaRepo.findAllPessoaLista());
 		return "rh/pessoas/index";
 	}
 	
@@ -57,7 +57,7 @@ public class PessoaControle {
 	
 	@GetMapping("/rh/pessoas/{id}")
 	public String alterarPessoa(@PathVariable("id") long id, Model model) {
-		Optional<Pessoa> pessoaOpt = pessoaRepo.findById(id);
+		Optional<Pessoa> pessoaOpt = pessoaRepo.findCompletoById(id);
 		if (pessoaOpt.isEmpty()) {
 			throw new IllegalArgumentException("Pessoa inválida.");
 		}
