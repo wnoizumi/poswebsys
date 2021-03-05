@@ -58,7 +58,7 @@ public class PessoaControle {
 	@GetMapping("/rh/pessoas/{id}")
 	public String alterarPessoa(@PathVariable("id") long id, Model model) {
 		Optional<Pessoa> pessoaOpt = pessoaRepo.findCompletoById(id);
-		if (pessoaOpt.isEmpty()) {
+		if (!pessoaOpt.isPresent()) {
 			throw new IllegalArgumentException("Pessoa inválida.");
 		}
 		
