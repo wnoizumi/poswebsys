@@ -2,7 +2,6 @@ package br.edu.ifpr.paranavai.poswebsys;
 
 import java.io.File;
 import java.time.LocalDate;
-import java.util.List;
 
 import javax.transaction.Transactional;
 

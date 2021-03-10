@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Sistema de Gestão de Pessoas</title>
 
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-	integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-	crossorigin="anonymous">
+<!--/*/ <th:block th:include="fragments/geral.html :: headerfiles">
+        </th:block> /*/-->
 
 </head>
 <body>
+	<header th:insert="fragments/geral.html :: header"> </header>
+
 	<div class="container my-2">
 		<a th:href="@{/rh/pessoas/nova}" class="btn btn-primary btn-sm mb-3">Incluir Pessoa</a>
 		<h1>Pessoas</h1>

@@ -1,25 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Sistema de Gestão de Pessoas</title>
 
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-	integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-	crossorigin="anonymous">
-	
- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
-<script
-  src="https://code.jquery.com/jquery-3.5.1.js"
-  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-  crossorigin="anonymous"></script>
-<script
-  src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
-  integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
-  crossorigin="anonymous"></script>
-  
+<!--/*/ <th:block th:include="fragments/geral.html :: headerfiles">
+        </th:block> /*/-->
+        
 <script type="text/javascript">
 	$(function() {
 		$("#nomeCidade").autocomplete({
@@ -46,9 +33,9 @@
 
 </head>
 <body>
+	<header th:insert="fragments/geral.html :: header"> </header>
+
 	<div class="container my-2">
-		<h1>Sistema de Gestão de Pessoas</h1>
-		<hr>
 		<h2>Editar Pessoa</h2>
 		<form action="#" th:action="@{/rh/pessoas/salvar}" th:object="${pessoa}" method="POST">
 			<input type="hidden" id="id" th:field="*{id}">
