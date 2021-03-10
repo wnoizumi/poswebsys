@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
@@ -19,6 +20,9 @@ import br.edu.ifpr.paranavai.poswebsys.rh.dominio.Departamento;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.DepartamentoRepositorio;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.Pessoa;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.PessoaRepositorio;
+import br.edu.ifpr.paranavai.poswebsys.seguranca.dominio.Roles;
+import br.edu.ifpr.paranavai.poswebsys.seguranca.dominio.Usuario;
+import br.edu.ifpr.paranavai.poswebsys.seguranca.dominio.UsuarioRepositorio;
 
 @Component
 @Transactional
@@ -31,9 +35,14 @@ public class PopulacaoInicialBanco implements CommandLineRunner {
 	@Autowired
 	private DepartamentoRepositorio departamentoRepo;
 	
+	@Autowired
+	private UsuarioRepositorio usuarioRepo;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Override
 	public void run(String... args) throws Exception {
-		
 		File jsonFile = ResourceUtils.getFile("classpath:municipios.json");
 		ObjectMapper cidadeMapper = new ObjectMapper();
 		JsonNode dataNode = cidadeMapper.readTree(jsonFile).get("data");
@@ -83,5 +92,13 @@ public class PopulacaoInicialBanco implements CommandLineRunner {
 		pessoaRepo.save(p1);
 		pessoaRepo.save(p2);
 		pessoaRepo.save(p3);
+		
+		Usuario u1 = new Usuario("willian", passwordEncoder.encode("willian"));
+		u1.setRole(Roles.ADMIN.getNome());
+		
+		Usuario u2 = new Usuario("user", passwordEncoder.encode("user"));
+		
+		usuarioRepo.save(u1);
+		usuarioRepo.save(u2);
 	}
 }
