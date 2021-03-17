@@ -24,20 +24,23 @@
 			role="navigation">
 			<div class="container-fluid">
 				<div class="navbar-header">
-					<a class="btn-outline-primary" href="#">Poswebsys</a>
+					<a class="btn-outline-primary" href="/">Poswebsys</a>
 				</div>
-				<ul class="nav navbar-nav navbar-right">
-					<li class="nav-item">
-						<form name="logoutForm" th:action="@{/logout}" method="post">
-							<label>Olá <span sec:authentication="name">Usuário</span></label>
-							<input class="btn btn-outline-danger" type="submit" value="Sair" />
-						</form>
-					</li>
-				</ul>
+				
+				<div sec:authorize="isAuthenticated()">
+					<ul class="nav navbar-nav navbar-right">
+						<li class="nav-item">
+							<form name="logoutForm" th:action="@{/logout}" method="post">
+								<label>Olá <span sec:authentication="name">Usuário</span></label>
+								<input class="btn btn-outline-danger" type="submit" value="Sair" />
+							</form>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</nav>
 		<div class="container my-2">
-			<h1>Gestão de Pessoas</h1>
+			<h1>Poswebsys</h1>
 			<hr>
 		</div>
 	</div>

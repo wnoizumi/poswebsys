@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+      <meta charset="utf-8">
+      <title>Entrar no Sistema</title>
+<!--/*/ <th:block th:include="fragments/geral.html :: headerfiles">
+        </th:block> /*/-->
+  </head>
+
+  <body>
+  	<header th:insert="fragments/geral.html :: header"> </header>
+    <div class="container my-2">
+      <form  method="POST" th:action="@{/login}">
+        <h2>Entrar no Sistema</h2>
+            <div th:if="${param.error}">
+	            <div class="alert alert-danger">
+	                Usuário ou senha inválidos.
+	            </div>
+			</div>
+            <input name="username" type="text" class="form-control mb-3 col-3" placeholder="Usuário"
+                   autofocus="autofocus" required="true" />
+
+            <input name="password" type="password" class="form-control mb-3 col-3" placeholder="Senha" required="true" />
+
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+            <button class="btn btn-info col-3" type="submit">Entrar</button>
+      </form>
+    </div>
+  </body>
+</html>

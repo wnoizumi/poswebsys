@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8" />
+<title>Sistema de Gestão de Pessoas</title>
+
+<!--/*/ <th:block th:include="fragments/geral.html :: headerfiles">
+        </th:block> /*/-->
+</head>
+<body>
+	<header th:insert="fragments/geral.html :: header"> </header>
+
+	<div class="container my-2">
+		<h2>Alterar Papel do Usuário</h2>
+		<form action="#" th:action="@{/adm/usuarios/alterar/role}" th:object="${roleUsuarioForm}" method="POST">
+			<input type="hidden" id="id" th:field="*{id}">
+			
+			<input type="text" disabled="disabled" th:field="*{username}" placeholder="Nome de usuário" class="form-control mb-4 col-4">
+      		      		
+      		<select class="form-control mb-4 col-4" th:field="*{role}" >
+			    <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
+			</select>
+			
+			<button type="submit" class="btn btn-info col-2">Alterar</button>
+		</form>
+		<hr>
+		<a th:href="@{/adm/usuarios}">Retornar para a lista de usuários</a>
+	</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8" />
+<title>Sistema de Gestão de Pessoas</title>
+
+<!--/*/ <th:block th:include="fragments/geral.html :: headerfiles">
+        </th:block> /*/-->
+
+</head>
+<body>
+	<header th:insert="fragments/geral.html :: header"> </header>
+
+	<div class="container my-2">
+		<a th:href="@{/adm/usuarios/novo}" class="btn btn-primary btn-sm mb-3">Incluir Usuário</a>
+		<h1>Usuários</h1>
+		<table border="1" class="table table-striped table-responsive-md">
+			<thead>
+				<tr>
+					<th>Username</th>
+					<th>Role</th>
+					<th>Ações</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="usuario : ${listaUsuarios}">
+					<td th:text="${usuario.username}"></td>
+					<td th:text="${usuario.role}"></td>
+					<td>
+						<a th:href="@{/adm/usuarios/alterar/role/{id}(id=${usuario.id})}" class="btn btn-primary">Alterar Papel</a>
+						<a th:href="@{/adm/usuarios/excluir/{id}(id=${usuario.id})}" class="btn btn-danger">Excluir</a>			
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8" />
+<title>Sistema de Gestão de Pessoas</title>
+
+<!--/*/ <th:block th:include="fragments/geral.html :: headerfiles">
+        </th:block> /*/-->
+</head>
+<body>
+	<header th:insert="fragments/geral.html :: header"> </header>
+
+	<div class="container my-2">
+		<h2>Novo Usuário</h2>
+		<form action="#" th:action="@{/adm/usuarios/salvar}" th:object="${usuario}" method="POST">
+			<input type="hidden" id="id" th:field="*{id}">
+			
+			<span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></span>
+			<input type="text" th:field="*{username}" placeholder="Nome de usuário" class="form-control mb-4 col-4">
+      		
+      		<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></span>
+			<input type="password" th:field="*{password}" placeholder="Senha" class="form-control mb-4 col-4">
+      		
+      		<select class="form-control mb-4 col-4" th:field="*{role}" >
+			    <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
+			</select>
+			
+			<button type="submit" class="btn btn-info col-2">Salvar</button>
+		</form>
+		<hr>
+		<a th:href="@{/adm/usuarios}">Retornar para a lista de usuários</a>
+	</div>
+</body>
+</html>

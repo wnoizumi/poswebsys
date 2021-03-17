@@ -14,15 +14,15 @@ import org.springframework.util.ResourceUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.edu.ifpr.paranavai.poswebsys.adm.dominio.Role;
+import br.edu.ifpr.paranavai.poswebsys.adm.dominio.Usuario;
+import br.edu.ifpr.paranavai.poswebsys.adm.dominio.UsuarioRepositorio;
 import br.edu.ifpr.paranavai.poswebsys.core.dominio.Cidade;
 import br.edu.ifpr.paranavai.poswebsys.core.dominio.CidadeRepositorio;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.Departamento;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.DepartamentoRepositorio;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.Pessoa;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.PessoaRepositorio;
-import br.edu.ifpr.paranavai.poswebsys.seguranca.dominio.Roles;
-import br.edu.ifpr.paranavai.poswebsys.seguranca.dominio.Usuario;
-import br.edu.ifpr.paranavai.poswebsys.seguranca.dominio.UsuarioRepositorio;
 
 @Component
 @Transactional
@@ -94,7 +94,7 @@ public class PopulacaoInicialBanco implements CommandLineRunner {
 		pessoaRepo.save(p3);
 		
 		Usuario u1 = new Usuario("willian", passwordEncoder.encode("willian"));
-		u1.setRole(Roles.ADMIN.getNome());
+		u1.setRole(Role.ADMIN.getNome());
 		
 		Usuario u2 = new Usuario("user", passwordEncoder.encode("user"));
 		

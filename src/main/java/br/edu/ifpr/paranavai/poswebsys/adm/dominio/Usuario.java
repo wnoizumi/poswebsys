@@ -1,11 +1,13 @@
-package br.edu.ifpr.paranavai.poswebsys.seguranca.dominio;
+package br.edu.ifpr.paranavai.poswebsys.adm.dominio;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Usuario {
@@ -14,10 +16,16 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
+	@NotBlank
+	@Column(nullable = false, unique = true)
 	private String username;
 	
+	@NotBlank
+	@Column(nullable = false)
 	private String password;
 	
+	@NotBlank
+	@Column(nullable = false)
 	private String role;
 
 	@Deprecated
@@ -26,7 +34,7 @@ public class Usuario {
 	public Usuario(String username, String password) {
 		this.username = username;
 		this.password = password;
-		this.role = Roles.USER.getNome();
+		this.role = Role.USER.getNome();
 	}
 	
 	public long getId() {

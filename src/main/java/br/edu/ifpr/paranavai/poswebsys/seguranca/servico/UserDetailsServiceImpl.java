@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.edu.ifpr.paranavai.poswebsys.seguranca.dominio.Usuario;
-import br.edu.ifpr.paranavai.poswebsys.seguranca.dominio.UsuarioRepositorio;
+import br.edu.ifpr.paranavai.poswebsys.adm.dominio.Usuario;
+import br.edu.ifpr.paranavai.poswebsys.adm.dominio.UsuarioRepositorio;
 
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
