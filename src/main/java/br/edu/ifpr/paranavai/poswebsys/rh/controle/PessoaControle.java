@@ -3,9 +3,14 @@ package br.edu.ifpr.paranavai.poswebsys.rh.controle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +29,7 @@ import br.edu.ifpr.paranavai.poswebsys.rh.dominio.DepartamentoRepositorio;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.Pessoa;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.PessoaRepositorio;
 import br.edu.ifpr.paranavai.poswebsys.rh.dominio.dtos.AutoCompleteDTO;
+import br.edu.ifpr.paranavai.poswebsys.rh.dominio.dtos.PessoaListaDTO;
 
 @Controller
 public class PessoaControle {
@@ -42,8 +48,23 @@ public class PessoaControle {
 	}
 	
 	@GetMapping("/rh/pessoas")
-	public String pessoas(Model model) {
-		model.addAttribute("listaPessoas", pessoaRepo.findAllPessoaLista());
+	public String pessoas(Model model, @RequestParam("page") Optional<Integer> pagina, @RequestParam("size") Optional<Integer> tamanho) {
+		int paginaAtual = pagina.orElse(1) - 1;
+		int tamanhoPagina = tamanho.orElse(5);
+		
+		PageRequest requisicao = PageRequest.of(paginaAtual, tamanhoPagina, Sort.by("nome"));
+		Page<PessoaListaDTO> listaPaginada = pessoaRepo.findAllPessoaListaPaginado(requisicao);
+		
+		model.addAttribute("listaPessoas", listaPaginada);
+
+		int totalPaginas = listaPaginada.getTotalPages();
+		if (totalPaginas > 0) {
+			List<Integer> numerosPaginas = IntStream.rangeClosed(1, totalPaginas)
+						.boxed()
+						.collect(Collectors.toList());
+			model.addAttribute("numerosPaginas", numerosPaginas);
+		}
+		
 		return "rh/pessoas/index";
 	}
 	

@@ -25,7 +25,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="pessoa : ${listaPessoas}">
+				<tr th:each="pessoa : ${listaPessoas.content}">
 					<td th:text="${pessoa.nome}"></td>
 					<td th:text="${pessoa.telefone}"></td>
 					<td th:text="${pessoa.email}"></td>
@@ -37,6 +37,15 @@
 				</tr>
 			</tbody>
 		</table>
+		<nav aria-label="...">
+		    <ul class="pagination">
+			    <li th:if="${listaPessoas.totalPages > 0}" th:each="numeroPagina : ${numerosPaginas}" 
+			    	th:class="${numeroPagina==listaPessoas.number + 1} ? 'page-item active' : 'page-item'">
+			    	<a class="page-link" th:href="@{/rh/pessoas(size=${listaPessoas.size}, page=${numeroPagina})}"
+			        th:text=${numeroPagina}></a>
+			    </li>
+		    </ul>
+		</nav>
 	</div>
 </body>
 </html>
